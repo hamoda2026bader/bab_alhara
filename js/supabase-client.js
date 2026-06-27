@@ -84,6 +84,10 @@ async function fetchDebts() {
   return window.supabaseRequest('/debts?select=*&order=id');
 }
 
+async function fetchPayments() {
+  return window.supabaseRequest('/payments?select=*&order=id.desc');
+}
+
 async function fetchInventoryMovements() {
   return window.supabaseRequest('/inventory_movements?select=*&order=id.desc');
 }

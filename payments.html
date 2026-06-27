@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المدفوعات - نظام باب الحارة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/payments.css">
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-store"></i> نظام باب الحارة</h2>
+      <p>سوبر ماركت مواد تموينية</p>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a href="dashboard.html"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+      <li><a href="products.html"><i class="fas fa-box"></i> المنتجات</a></li>
+      <li><a href="sales.html"><i class="fas fa-shopping-cart"></i> المبيعات</a></li>
+      <li><a href="reports.html"><i class="fas fa-chart-bar"></i> التقارير</a></li>
+      <li><a href="debts.html"><i class="fas fa-file-invoice-dollar"></i> الديون</a></li>
+      <li><a href="payments.html" class="active"><i class="fas fa-money-check-alt"></i> المدفوعات</a></li>
+      <li class="logout"><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <h2>المدفوعات</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="user-info">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div class="user-details">
+            <h4 id="user-name">Admin User</h4>
+            <span id="user-role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 class="page-title"><i class="fas fa-money-check-alt"></i> إدارة المدفوعات</h1>
+
+      <div class="payment-form-section">
+        <div class="card">
+          <h3><i class="fas fa-plus"></i> إضافة دفعة جديدة</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>الوصف</label>
+              <input type="text" id="payment-description" class="form-control">
+            </div>
+            <div class="form-group">
+              <label>المبلغ (₪)</label>
+              <input type="number" id="payment-amount" class="form-control" step="0.01" min="0" placeholder="أدخل المبلغ">
+            </div>
+            <div class="form-group">
+              <label>التاريخ</label>
+              <input type="date" id="payment-date" class="form-control" value="">
+            </div>
+          </div>
+          <button class="btn btn-success" onclick="addPayment()"><i class="fas fa-save"></i> حفظ الدفعة</button>
+        </div>
+      </div>
+
+      <div class="payment-summary-section">
+        <div class="stat-card">
+          <div class="stat-icon payments">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="total-payments">₪0.00</h3>
+            <p>إجمالي المدفوعات</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-list-section">
+        <div class="card">
+          <h3><i class="fas fa-list"></i> جدول المدفوعات</h3>
+          <div class="search-bar">
+            <input type="text" id="payment-search" placeholder="ابحث بالوصف أو التاريخ...">
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>الوصف</th>
+                  <th>المبلغ</th>
+                  <th>التاريخ</th>
+                  <th>الإجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="payments-list"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/payments.js"></script>
+</body>
+</html>

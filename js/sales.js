@@ -161,7 +161,7 @@ function removeFromInvoice(index) {
 function updateInvoiceSummary() {
   const subtotal = currentInvoiceItems.reduce((sum, item) => sum + (item.price * item.qty), 0);
   const discount = parseFloat(document.getElementById('invoice-discount')?.value) || 0;
-  const total = Math.max(0, subtotal - discount);
+  const total = Math.max(0, subtotal + discount);
 
   document.getElementById('summary-subtotal').textContent = formatCurrency(subtotal);
   document.getElementById('summary-total').textContent = formatCurrency(total);
@@ -194,10 +194,10 @@ async function createInvoice() {
   }
 
   const itemsToSave = currentInvoiceItems.map(item => ({ ...item }));
-  const customerName = document.getElementById('invoice-customer-name').value.trim() || 'زبون';
-  const subtotal = itemsToSave.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  const discount = parseFloat(document.getElementById('invoice-discount').value) || 0;
-  const total = Math.max(0, subtotal - discount);
+const customerName = document.getElementById('invoice-customer-name').value.trim() || 'زبون';
+   const subtotal = itemsToSave.reduce((sum, item) => sum + (item.price * item.qty), 0);
+   const discount = parseFloat(document.getElementById('invoice-discount').value) || 0;
+   const total = Math.max(0, subtotal + discount);
   const totalCost = itemsToSave.reduce((sum, item) => sum + (item.cost * item.qty), 0);
   const profit = total - totalCost;
   const status = document.getElementById('invoice-status').value;
@@ -363,11 +363,11 @@ async function printInvoice(invoiceId) {
             `).join('')}
           </tbody>
         </table>
-        <div class="totals">
-          <p>المجموع: ${formatCurrency(sale.subtotal)}</p>
-          ${sale.discount > 0 ? `<p>الخصم: ${formatCurrency(sale.discount)}</p>` : ''}
-          <p class="final">الإجمالي: ${formatCurrency(sale.total)}</p>
-        </div>
+<div class="totals">
+           <p>المجموع: ${formatCurrency(sale.subtotal)}</p>
+           ${sale.discount > 0 ? `<p>الإضافة: ${formatCurrency(sale.discount)}</p>` : ''}
+           <p class="final">الإجمالي: ${formatCurrency(sale.total)}</p>
+         </div>
         <script>window.onload = function() { window.print(); }<\/script>
       </body>
       </html>

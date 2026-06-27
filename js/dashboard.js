@@ -17,10 +17,6 @@ async function loadDashboard() {
     document.getElementById('stat-outstanding-debts').textContent = formatCurrency(outstandingDebts);
     document.getElementById('stat-low-stock').textContent = lowStock;
 
-    if (outstandingDebts > 0) {
-      document.getElementById('debt-alert').classList.remove('hidden');
-    }
-
     const recentSales = [...sales].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
     const tbody = document.getElementById('recent-sales-body');
 
