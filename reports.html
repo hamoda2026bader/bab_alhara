@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التقارير - نظام باب الحارة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/reports.css">
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-store"></i> نظام باب الحارة</h2>
+      <p>سوبر ماركت مواد تموينية</p>
+    </div>
+<ul class="sidebar-nav">
+       <li><a href="dashboard.html"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+       <li><a href="products.html"><i class="fas fa-box"></i> المنتجات</a></li>
+       <li><a href="sales.html"><i class="fas fa-shopping-cart"></i> المبيعات</a></li>
+        <li><a href="reports.html" class="active"><i class="fas fa-chart-bar"></i> التقارير</a></li>
+        <li><a href="debts.html"><i class="fas fa-file-invoice-dollar"></i> الديون</a></li>
+       <li class="logout"><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+     </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <h2>التقارير</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="user-info">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div class="user-details">
+            <h4 id="user-name">Admin User</h4>
+            <span id="user-role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 class="page-title"><i class="fas fa-chart-bar"></i> التقارير</h1>
+
+      <div class="reports-tabs">
+        <button class="btn btn-primary active" onclick="setPeriod('all', this)">كل الوقت</button>
+        <button class="btn btn-secondary" onclick="setPeriod('daily', this)">يومي</button>
+        <button class="btn btn-secondary" onclick="setPeriod('monthly', this)">شهري</button>
+        <button class="btn btn-secondary" onclick="setPeriod('yearly', this)">سنوي</button>
+      </div>
+
+      <div class="report-filters">
+        <input type="date" id="report-from">
+        <input type="date" id="report-to">
+        <button class="btn btn-primary" onclick="updateReports()"><i class="fas fa-filter"></i> تطبيق</button>
+      </div>
+
+      <div class="export-section">
+        <button class="btn btn-success" onclick="exportReport('csv')"><i class="fas fa-file-csv"></i> تصدير CSV</button>
+        <button class="btn btn-primary" onclick="printReport()"><i class="fas fa-print"></i> طباعة</button>
+      </div>
+
+      <div class="report-cards">
+        <div class="report-card">
+          <h4>إجمالي البيع</h4>
+          <div class="value" id="report-revenue">₪0.00</div>
+        </div>
+        <div class="report-card">
+          <h4>إجمالي الربح</h4>
+          <div class="value value-profit" id="report-profit">₪0.00</div>
+        </div>
+        <div class="report-card">
+          <h4>عدد الفواتير</h4>
+          <div class="value" id="report-orders">0</div>
+        </div>
+        <div class="report-card">
+          <h4>متوسط الفاتورة</h4>
+          <div class="value" id="report-aov">₪0.00</div>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <div class="bar-chart">
+          <h3><i class="fas fa-chart-bar"></i> المنتجات الأكثر مبيعاً</h3>
+          <div class="bars" id="products-chart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/reports.js"></script>
+</body>
+</html>

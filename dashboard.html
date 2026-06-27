@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم - نظام باب الحارة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-store"></i> نظام باب الحارة</h2>
+      <p>سوبر ماركت مواد تموينية</p>
+    </div>
+<ul class="sidebar-nav">
+       <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+       <li><a href="products.html"><i class="fas fa-box"></i> المنتجات</a></li>
+       <li><a href="sales.html"><i class="fas fa-shopping-cart"></i> المبيعات</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-bar"></i> التقارير</a></li>
+        <li><a href="debts.html"><i class="fas fa-file-invoice-dollar"></i> الديون</a></li>
+       <li class="logout"><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+     </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <h2>لوحة التحكم</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="user-info">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div class="user-details">
+            <h4 id="user-name">Admin User</h4>
+            <span id="user-role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 class="page-title"><i class="fas fa-home"></i> نظرة عامة</h1>
+
+      <div class="alert alert-warning hidden" id="debt-alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>تنبيه!</strong> يوجد ديون معلقة تحتاج متابعة.
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon sales"><i class="fas fa-shekel-sign"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-total-sales">₪0.00</h3>
+            <p>إجمالي المبيعات</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon products"><i class="fas fa-box"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-total-products">0</h3>
+            <p>إجمالي المنتجات</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon profit"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-total-profit">₪0.00</h3>
+            <p>إجمالي الربح</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon debts"><i class="fas fa-file-invoice-dollar"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-outstanding-debts">₪0.00</h3>
+            <p>الديون المعلقة</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stock"><i class="fas fa-exclamation-triangle"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-low-stock">0</h3>
+            <p>منتجات مخزون منخفض</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <h3><i class="fas fa-history"></i> المبيعات الأخيرة</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>رقم الفاتورة</th>
+                  <th>الزبون</th>
+                  <th>المبلغ</th>
+                  <th>الحالة</th>
+                  <th>التاريخ</th>
+                </tr>
+              </thead>
+              <tbody id="recent-sales-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-exclamation-triangle"></i> تنبيهات المخزون المنخفض</h3>
+          <div id="low-stock-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   <script src="js/supabase-client.js"></script>
+   <script src="js/utils.js"></script>
+   <script src="js/dashboard.js"></script>
+</body>
+</html>

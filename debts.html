@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الديون - نظام باب الحارة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/debts.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-store"></i> نظام باب الحارة</h2>
+            <p>سوبر ماركت مواد تموينية</p>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-home"></i> لوحة التحكم</a></li>
+            <li><a href="products.html"><i class="fas fa-box"></i> المنتجات</a></li>
+            <li><a href="sales.html"><i class="fas fa-shopping-cart"></i> المبيعات</a></li>
+            <li><a href="reports.html"><i class="fas fa-chart-bar"></i> التقارير</a></li>
+            <li><a href="debts.html" class="active"><i class="fas fa-file-invoice-dollar"></i> الديون</a></li>
+            <li class="logout"><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-title">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <h2>الديون</h2>
+            </div>
+            <div class="topbar-right">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">A</div>
+                    <div class="user-details">
+                        <h4 id="user-name">Admin User</h4>
+                        <span id="user-role">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <h1 class="page-title"><i class="fas fa-file-invoice-dollar"></i> إدارة الديون</h1>
+
+            <div class="search-bar">
+                <input type="text" id="debt-search" placeholder="ابحث بالاسم أو رقم الفاتورة...">
+            </div>
+
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>العميل</th>
+                            <th>الدين المتبقي</th>
+                            <th>المدفوع</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="debts-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>تسديد الدين</h3>
+                <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>المبلغ المدفوع</label>
+                    <input type="number" id="payment-amount" class="form-control" step="0.01" min="0" placeholder="أدخل المبلغ المراد دفعه">
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closePaymentModal()">إلغاء</button>
+                    <button class="btn btn-success" onclick="confirmPayment()">تسديد</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/debts.js"></script>
+</body>
+</html>

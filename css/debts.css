@@ -1,0 +1,112 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+.page-title {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title i {
+    color: #667eea;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 14px 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    text-align: right;
+}
+
+.search-bar input::placeholder {
+    color: #999;
+}
+
+.card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th {
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 18px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table td {
+    padding: 18px 15px;
+    border: 1px solid #ddd;
+    color: #444;
+    font-size: 17px;
+    text-align: center;
+}
+
+table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.debt-balance {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e74c3c;
+    background: #fff5f5;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.empty-state i {
+    font-size: 50px;
+    color: #d0d0d0;
+    margin-bottom: 15px;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 20px;
+    }
+    
+    .card {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    table th,
+    table td {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+}
