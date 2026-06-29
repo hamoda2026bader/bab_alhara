@@ -78,7 +78,7 @@
 
 .invoice-item {
   display: grid;
-  grid-template-columns: 3fr 1fr 1fr 1fr 40px;
+  grid-template-columns: 2fr 1fr 1fr 1fr 40px;
   gap: 10px;
   padding: 12px 15px;
   align-items: center;
@@ -124,6 +124,33 @@
 
 .remove-item:hover {
   transform: scale(1.2);
+}
+
+.qty-btn {
+  background: #3498db;
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover {
+  background: #2980b9;
+}
+
+.qty-value {
+  margin: 0 8px;
+  font-weight: 600;
+  min-width: 20px;
+  display: inline-block;
+  text-align: center;
 }
 
 .invoice-summary {

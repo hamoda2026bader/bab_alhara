@@ -79,16 +79,16 @@ async function addToInvoice(productId) {
 
     const existing = currentInvoiceItems.find(item => item.productId === productId);
     if (existing) {
-      alert('تم إضافة هذا المنتج مسبقاً');
-      return;
+      existing.qty += 1;
+    } else {
+      currentInvoiceItems.push({
+        productId: product.id,
+        name: product.name,
+        price: product.sellingprice,
+        cost: product.purchaseprice,
+        qty: 1
+      });
     }
-    currentInvoiceItems.push({
-      productId: product.id,
-      name: product.name,
-      price: product.sellingprice,
-      cost: product.purchaseprice,
-      qty: 1
-    });
 
     renderInvoiceItems();
     updateInvoiceSummary();
@@ -105,6 +105,7 @@ function renderInvoiceItems() {
       <div class="invoice-item header">
         <span>المنتج</span>
         <span>السعر</span>
+        <span>الكمية</span>
         <span>الإجمالي</span>
         <span></span>
       </div>
@@ -117,6 +118,7 @@ function renderInvoiceItems() {
     <div class="invoice-item header">
       <span>المنتج</span>
       <span>السعر</span>
+      <span>الكمية</span>
       <span>الإجمالي</span>
       <span></span>
     </div>
@@ -126,15 +128,29 @@ function renderInvoiceItems() {
     <div class="invoice-item">
       <span>${item.name}</span>
       <span>${formatCurrency(item.price)}</span>
+      <span>
+        <button onclick="changeQuantity(${index}, -1)" class="qty-btn">-</button>
+        <span class="qty-value">${item.qty}</span>
+        <button onclick="changeQuantity(${index}, 1)" class="qty-btn">+</button>
+      </span>
       <span class="item-total">${formatCurrency(item.price * item.qty)}</span>
-      <button class="remove-item" onclick="removeFromInvoice(${index})">&times;</button>
+      <button class="remove-item" onclick="removeItemCompletely(${index})" title="إزالة المنتج">&times;</button>
     </div>
   `).join('');
 
   container.innerHTML = html;
 }
 
-function removeFromInvoice(index) {
+function changeQuantity(index, delta) {
+  const item = currentInvoiceItems[index];
+  if (!item) return;
+  
+  item.qty = Math.max(1, item.qty + delta);
+  renderInvoiceItems();
+  updateInvoiceSummary();
+}
+
+function removeItemCompletely(index) {
   currentInvoiceItems.splice(index, 1);
   renderInvoiceItems();
   updateInvoiceSummary();
