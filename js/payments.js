@@ -2,6 +2,17 @@ async function loadPayments() {
   return await fetchPayments();
 }
 
+async function loadPaymentDescriptions() {
+  try {
+    const payments = await loadPayments();
+    const descriptions = [...new Set(payments.map(p => p.description).filter(d => d))].sort();
+    const datalist = document.getElementById('payment-description-list');
+    if (datalist) {
+      datalist.innerHTML = descriptions.map(d => `<option value="${d}"></option>`).join('');
+    }
+  } catch (e) {}
+}
+
 function getNextPaymentId(payments) {
   return payments.length > 0 ? Math.max(...payments.map(p => p.id)) + 1 : 1;
 }
@@ -42,6 +53,7 @@ async function addPayment() {
     await savePayment(newPayment);
     document.getElementById('payment-description').value = '';
     document.getElementById('payment-amount').value = '';
+    loadPaymentDescriptions();
     renderPayments();
   } catch (error) {
     alert('حدث خطأ: ' + error.message);
@@ -57,6 +69,7 @@ async function renderPayments(payments = null) {
     if (allPayments.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#95a5a6;padding:40px;">لا توجد مدفوعات مسجلة</td></tr>';
       document.getElementById('total-payments').textContent = formatCurrency(0);
+      document.getElementById('today-payments').textContent = formatCurrency(0);
       return;
     }
 
@@ -77,6 +90,12 @@ async function renderPayments(payments = null) {
 
     const total = allPayments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
     document.getElementById('total-payments').textContent = formatCurrency(total);
+
+    const today = new Date().toISOString().split('T')[0];
+    const todayTotal = allPayments
+      .filter(p => p.date === today)
+      .reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
+    document.getElementById('today-payments').textContent = formatCurrency(todayTotal);
   } catch (error) {
     alert('خطأ في تحميل المدفوعات');
   }
@@ -118,5 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.getElementById('payment-search').addEventListener('input', searchPayments);
   
+  loadPaymentDescriptions();
   renderPayments();
 });

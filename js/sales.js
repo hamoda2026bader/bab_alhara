@@ -10,8 +10,15 @@ async function loadDebts() {
   return await fetchDebts();
 }
 
-function getNextId(arr) {
-  return arr.length > 0 ? Math.max(...arr.map(i => i.id)) + 1 : 1;
+async function loadCustomers() {
+  try {
+    const sales = await loadSales();
+    const customers = [...new Set(sales.map(s => s.customername).filter(c => c))].sort();
+    const datalist = document.getElementById('customer-list');
+    if (datalist) {
+      datalist.innerHTML = customers.map(c => `<option value="${c}"></option>`).join('');
+    }
+  } catch (e) {}
 }
 
 let currentInvoiceItems = [];
@@ -40,17 +47,18 @@ function initSalesPage() {
 }
 
 async function handleBarcodeScan() {
-  const barcode = document.getElementById('barcode-input').value.trim();
-  if (!barcode) return;
+  const input = document.getElementById('barcode-input').value.trim();
+  if (!input) return;
 
   try {
     const products = await loadProducts();
     const product = products.find(p =>
-      p.barcode && p.barcode.toLowerCase() === barcode.toLowerCase()
+      (p.barcode && p.barcode.toLowerCase() === input.toLowerCase()) ||
+      p.name.toLowerCase() === input.toLowerCase()
     );
 
     if (!product) {
-      alert('المنتج غير موجود: ' + barcode);
+      alert('المنتج غير موجود: ' + input);
       document.getElementById('barcode-input').select();
       return;
     }
@@ -71,26 +79,16 @@ async function addToInvoice(productId) {
 
     const existing = currentInvoiceItems.find(item => item.productId === productId);
     if (existing) {
-      if (existing.qty < parseInt(product.stock)) {
-        existing.qty++;
-      } else {
-        alert('لا يوجد مخزون كافٍ');
-        return;
-      }
-    } else {
-      if (parseInt(product.stock) <= 0) {
-        alert('المنتج نفذ من المخزون');
-        return;
-      }
-      currentInvoiceItems.push({
-        productId: product.id,
-        name: product.name,
-        price: product.sellingprice,
-        cost: product.purchaseprice,
-        qty: 1,
-        stock: product.stock
-      });
+      alert('تم إضافة هذا المنتج مسبقاً');
+      return;
     }
+    currentInvoiceItems.push({
+      productId: product.id,
+      name: product.name,
+      price: product.sellingprice,
+      cost: product.purchaseprice,
+      qty: 1
+    });
 
     renderInvoiceItems();
     updateInvoiceSummary();
@@ -107,7 +105,6 @@ function renderInvoiceItems() {
       <div class="invoice-item header">
         <span>المنتج</span>
         <span>السعر</span>
-        <span>الكمية</span>
         <span>الإجمالي</span>
         <span></span>
       </div>
@@ -120,7 +117,6 @@ function renderInvoiceItems() {
     <div class="invoice-item header">
       <span>المنتج</span>
       <span>السعر</span>
-      <span>الكمية</span>
       <span>الإجمالي</span>
       <span></span>
     </div>
@@ -130,26 +126,12 @@ function renderInvoiceItems() {
     <div class="invoice-item">
       <span>${item.name}</span>
       <span>${formatCurrency(item.price)}</span>
-      <input type="number" value="${item.qty}" min="1" max="${item.stock}" onchange="updateItemQty(${index}, this.value)">
       <span class="item-total">${formatCurrency(item.price * item.qty)}</span>
       <button class="remove-item" onclick="removeFromInvoice(${index})">&times;</button>
     </div>
   `).join('');
 
   container.innerHTML = html;
-}
-
-function updateItemQty(index, qty) {
-  const q = parseInt(qty) || 1;
-  if (q < 1) return;
-  if (q > currentInvoiceItems[index].stock) {
-    alert('الكمية تتجاوز المخزون المتاح');
-    renderInvoiceItems();
-    return;
-  }
-  currentInvoiceItems[index].qty = q;
-  renderInvoiceItems();
-  updateInvoiceSummary();
 }
 
 function removeFromInvoice(index) {
@@ -232,7 +214,6 @@ const customerName = document.getElementById('invoice-customer-name').value.trim
       const existingDebt = debts.find(d => d.customername === customerName && d.status === 'active');
 
       if (existingDebt) {
-        const newPaid = parseFloat(existingDebt.paid || 0);
         const newOriginal = parseFloat(existingDebt.original) + total;
         const invoiceIds = existingDebt.invoiceIds ? JSON.parse(existingDebt.invoiceIds) : [];
         invoiceIds.push(sale.invoiceid);
@@ -258,26 +239,6 @@ const customerName = document.getElementById('invoice-customer-name').value.trim
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newDebt)
-        });
-      }
-    }
-
-    const products = await loadProducts();
-    for (const item of itemsToSave) {
-      const product = products.find(p => p.id === item.productId);
-      if (product) {
-        const oldStock = parseInt(product.stock) || 0;
-        const newStock = Math.max(0, oldStock - item.qty);
-        await updateProductStock(product.id, newStock);
-        await saveInventoryMovement({
-          productid: product.id,
-          productname: product.name,
-          type: 'out',
-          qty: item.qty,
-          previousstock: oldStock,
-          newstock: newStock,
-          note: 'بيع ' + sale.invoiceid,
-          date: new Date().toISOString()
         });
       }
     }
@@ -351,13 +312,12 @@ async function printInvoice(invoiceId) {
         <p><strong>الزبون:</strong> ${sale.customername}</p>
         <p><strong>الحالة:</strong> ${getPaymentStatusLabel(sale.status)}</p>
         <table>
-          <thead><tr><th>المنتج</th><th>السعر</th><th>الكمية</th><th>الإجمالي</th></tr></thead>
+          <thead><tr><th>المنتج</th><th>السعر</th><th>الإجمالي</th></tr></thead>
           <tbody>
             ${sale.items.map(item => `
               <tr>
                 <td>${item.name}</td>
                 <td>${formatCurrency(item.price)}</td>
-                <td>${item.qty}</td>
                 <td>${formatCurrency(item.price * item.qty)}</td>
               </tr>
             `).join('')}
@@ -387,5 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('invoice-discount').addEventListener('input', updateInvoiceSummary);
 
   initSalesPage();
+  loadCustomers();
   renderInvoiceHistory();
 });

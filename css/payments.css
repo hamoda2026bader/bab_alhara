@@ -1,3 +1,18 @@
+.payment-summary-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.payment-summary-section .stat-card {
+  max-width: none;
+}
+
+.stat-icon.payments {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
 .payment-form-section {
   margin-bottom: 25px;
 }
@@ -11,18 +26,6 @@
   grid-template-columns: 2fr 1fr 1fr;
   gap: 20px;
   margin-bottom: 20px;
-}
-
-.payment-summary-section {
-  margin-bottom: 25px;
-}
-
-.payment-summary-section .stat-card {
-  max-width: 300px;
-}
-
-.stat-icon.payments {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
 }
 
 .payment-list-section .table-container {
@@ -42,4 +45,10 @@
 
 .remove-payment:hover {
   background: #ffeaea;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }

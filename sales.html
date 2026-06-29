@@ -52,7 +52,8 @@
           <div class="invoice-fields">
             <div class="form-group">
               <label>اسم الشخص</label>
-              <input type="text" id="invoice-customer-name" class="form-control" placeholder="أدخل اسم الزبون">
+              <input type="text" id="invoice-customer-name" class="form-control" placeholder="أدخل اسم الزبون" list="customer-list">
+              <datalist id="customer-list"></datalist>
             </div>
             <div class="form-group">
               <label>الباركود</label>
@@ -60,16 +61,15 @@
             </div>
           </div>
 
-          <div id="invoice-items-container" class="invoice-items">
-            <div class="invoice-item header">
-              <span>المنتج</span>
-              <span>السعر</span>
-              <span>الكمية</span>
-              <span>الإجمالي</span>
-              <span></span>
-            </div>
-            <p class="empty-invoice-msg">لا توجد أصناف. امسح الباركود لإضافة منتج.</p>
-          </div>
+<div id="invoice-items-container" class="invoice-items">
+             <div class="invoice-item header">
+               <span>المنتج</span>
+               <span>السعر</span>
+               <span>الإجمالي</span>
+               <span></span>
+             </div>
+             <p class="empty-invoice-msg">لا توجد أصناف. امسح الباركود لإضافة منتج.</p>
+           </div>
         </div>
 
         <div class="invoice-summary">
