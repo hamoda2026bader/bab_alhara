@@ -9,13 +9,24 @@ async function loadDashboard() {
     const outstandingDebts = debts
       .filter(d => d.status === 'active')
       .reduce((sum, d) => sum + (parseFloat(d.original) - parseFloat(d.paid || 0)), 0);
-    const lowStock = products.filter(p => parseInt(p.stock) > 0 && parseInt(p.stock) < 10).length;
+
+    const today = new Date();
+    const isToday = d => {
+      const dt = new Date(d);
+      return dt.getFullYear() === today.getFullYear()
+        && dt.getMonth() === today.getMonth()
+        && dt.getDate() === today.getDate();
+    };
+    const todaysSales = sales.filter(s => isToday(s.date));
+    const todaySales = todaysSales.reduce((sum, s) => sum + parseFloat(s.total || 0), 0);
+    const todayProfit = todaysSales.reduce((sum, s) => sum + parseFloat(s.profit || 0), 0);
 
     document.getElementById('stat-total-sales').textContent = formatCurrency(totalSales);
     document.getElementById('stat-total-products').textContent = products.length;
     document.getElementById('stat-total-profit').textContent = formatCurrency(totalProfit);
     document.getElementById('stat-outstanding-debts').textContent = formatCurrency(outstandingDebts);
-    document.getElementById('stat-low-stock').textContent = lowStock;
+    document.getElementById('stat-today-sales').textContent = formatCurrency(todaySales);
+    document.getElementById('stat-today-profit').textContent = formatCurrency(todayProfit);
 
     const recentSales = [...sales].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
     const tbody = document.getElementById('recent-sales-body');
@@ -34,18 +45,6 @@ async function loadDashboard() {
       `).join('');
     }
 
-    const lowStockProducts = products.filter(p => parseInt(p.stock) > 0 && parseInt(p.stock) < 10);
-    const lowStockList = document.getElementById('low-stock-list');
-
-    if (lowStockProducts.length === 0) {
-      lowStockList.innerHTML = '<div class="alert alert-info"><i class="fas fa-check-circle"></i> جميع المنتجات بمخزون كافٍ</div>';
-    } else {
-      lowStockList.innerHTML = lowStockProducts.map(p => `
-        <div class="alert alert-warning" style="margin-bottom:8px;">
-          <i class="fas fa-box"></i> ${p.name} — متبقي ${p.stock} وحدة
-        </div>
-      `).join('');
-    }
   } catch (error) {
     console.error('Error loading dashboard:', error);
   }

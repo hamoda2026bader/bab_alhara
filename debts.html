@@ -45,8 +45,15 @@
         <div class="content">
             <h1 class="page-title"><i class="fas fa-file-invoice-dollar"></i> إدارة الديون</h1>
 
-            <div class="search-bar">
-                <input type="text" id="debt-search" placeholder="ابحث بالاسم أو رقم الفاتورة...">
+            <div class="debts-toolbar">
+                <div class="search-bar">
+                    <input type="text" id="debt-search" placeholder="ابحث بالاسم أو رقم الفاتورة...">
+                </div>
+
+                <div class="export-buttons">
+                    <button class="btn btn-success" onclick="exportDebtsExcel()"><i class="fas fa-file-excel"></i> تصدير Excel</button>
+                    <button class="btn btn-danger" onclick="exportDebtsImage()"><i class="fas fa-image"></i> تصدير صورة</button>
+                </div>
             </div>
 
             <div class="card">
@@ -85,6 +92,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/debts.js"></script>

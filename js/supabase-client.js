@@ -142,6 +142,10 @@ async function saveSale(sale) {
   });
 }
 
+async function deleteSale(id) {
+  return window.supabaseRequest(`/sales?id=eq.${id}`, { method: 'DELETE' });
+}
+
 async function saveInventoryMovement(movement) {
   return window.supabaseRequest('/inventory_movements', {
     method: 'POST',

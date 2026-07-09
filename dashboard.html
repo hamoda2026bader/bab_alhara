@@ -44,9 +44,21 @@
     <div class="content">
       <h1 class="page-title"><i class="fas fa-home"></i> نظرة عامة</h1>
 
-      
-
       <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon sales"><i class="fas fa-calendar-day"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-today-sales">₪0.00</h3>
+            <p>مبيعات اليوم</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon profit"><i class="fas fa-calendar-day"></i></div>
+          <div class="stat-info">
+            <h3 id="stat-today-profit">₪0.00</h3>
+            <p>ربح اليوم</p>
+          </div>
+        </div>
         <div class="stat-card">
           <div class="stat-icon sales"><i class="fas fa-shekel-sign"></i></div>
           <div class="stat-info">
@@ -75,13 +87,6 @@
             <p>الديون المعلقة</p>
           </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon stock"><i class="fas fa-exclamation-triangle"></i></div>
-          <div class="stat-info">
-            <h3 id="stat-low-stock">0</h3>
-            <p>منتجات مخزون منخفض</p>
-          </div>
-        </div>
       </div>
 
       <div class="cards-grid">
@@ -102,10 +107,6 @@
               </tbody>
             </table>
           </div>
-        </div>
-        <div class="card">
-          <h3><i class="fas fa-exclamation-triangle"></i> تنبيهات المخزون المنخفض</h3>
-          <div id="low-stock-list"></div>
         </div>
       </div>
     </div>

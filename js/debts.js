@@ -105,6 +105,82 @@ async function searchDebts() {
   }
 }
 
+async function getActiveDebts() {
+  const debts = await loadDebts();
+  return debts.filter(d => d.status === 'active' && getDebtRemaining(d) > 0);
+}
+
+async function exportDebtsExcel() {
+  try {
+    const debts = await getActiveDebts();
+    let csv = 'العميل,الدين المتبقي,المدفوع\n';
+    debts.forEach(d => {
+      csv += `"${d.customername}","${formatCurrency(getDebtRemaining(d))}","${formatCurrency(d.paid || 0)}"\n`;
+    });
+
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'الديون-' + new Date().toISOString().split('T')[0] + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    alert('خطأ في تصدير Excel');
+  }
+}
+
+async function exportDebtsImage() {
+  try {
+    const debts = await getActiveDebts();
+    if (debts.length === 0) {
+      alert('لا توجد ديون للتصدير');
+      return;
+    }
+
+    const html2canvasFn = window.html2canvas;
+    if (!html2canvasFn) {
+      alert('مكتبة الصور غير محمّلة');
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.dir = 'rtl';
+    container.style.cssText = 'width:794px;margin:0 auto;background:#fff;font-size:12px;';
+    container.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr>
+            <th style="border:1px solid #ddd;padding:5px;background:#f8f9fa;text-align:right;">العميل</th>
+            <th style="border:1px solid #ddd;padding:5px;background:#f8f9fa;text-align:right;">الدين المتبقي</th>
+            <th style="border:1px solid #ddd;padding:5px;background:#f8f9fa;text-align:right;">المدفوع</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${debts.map(d => `
+            <tr>
+              <td style="border:1px solid #ddd;padding:5px;text-align:right;">${d.customername}</td>
+              <td style="border:1px solid #ddd;padding:5px;text-align:right;color:#e74c3c;font-weight:600;">${formatCurrency(getDebtRemaining(d))}</td>
+              <td style="border:1px solid #ddd;padding:5px;text-align:right;">${formatCurrency(d.paid || 0)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    document.body.appendChild(container);
+
+    const canvas = await html2canvasFn(container, { scale: 2, backgroundColor: '#ffffff' });
+    const link = document.createElement('a');
+    link.download = 'الديون-' + new Date().toISOString().split('T')[0] + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    document.body.removeChild(container);
+  } catch (error) {
+    alert('خطأ في تصدير الصورة');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const user = checkAuth();
   if (!user) return;
